@@ -84,7 +84,7 @@ app.get("/", (c) => {
     const themeToggle = document.getElementById('theme-toggle');
     const body = document.body;
 
-    const savedTheme = localStorage.getItem('theme') || 'light';
+    const savedTheme = localStorage.getItem('theme') || 'dark';
     body.className = savedTheme + '-mode';
     updateToggleButton();
 
@@ -104,8 +104,29 @@ app.get("/", (c) => {
     const container = document.getElementById('heart-container');
     const heartPre = document.getElementById('heart');
 
-    const width = 180;
-    const height = 120;
+    let width, height;
+    
+    function updateDimensions() {
+      const charWidth = 8;
+      const charHeight = 14;
+      const maxWidth = Math.floor((window.innerWidth * 0.9) / charWidth);
+      const maxHeight = Math.floor((window.innerHeight * 0.8) / charHeight);
+      
+      width = Math.min(180, maxWidth);
+      height = Math.min(120, maxHeight);
+      
+      // Adjust font size for mobile
+      if (window.innerWidth < 768) {
+        heartPre.style.fontSize = '8px';
+        heartPre.style.lineHeight = '8px';
+      } else {
+        heartPre.style.fontSize = '14px';
+        heartPre.style.lineHeight = '14px';
+      }
+    }
+    
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
 
     let A = Math.PI, B = 0;
     const chars = ' .:-=+*#%@♥';
